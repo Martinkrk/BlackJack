@@ -1,9 +1,6 @@
 package blackjack;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,10 +69,24 @@ public class BlackJack {
      
      
      System.out.println("Welcome to BlackJack, made by Martin");
+     
      while(true) {
-     System.out.printf("Enter the number of players(1-4): ");         
-     player_num = scn.nextInt();
-     break;
+        player_num = 0;
+        System.out.printf("Enter the number of players(1-4): ");
+
+        try{
+            player_num = scn.nextInt();
+        }
+        catch (java.util.InputMismatchException e) {
+            System.err.println("Wrong input! Enter an integer!");
+            continue;
+        }
+        catch (Exception e){
+            System.err.println(e);
+            continue;
+        }
+         System.out.println("Yoo");
+        break;
      }
      
      while(mainloop){
