@@ -34,8 +34,7 @@ public class BlackJack {
     
     public class Deck {
         
-//        Card[] cards = new ArrayList(Card[52]);
-        ArrayList<Card> cards = new ArrayList<Card>();
+        ArrayList<Card> cards = new ArrayList<>();
         
         Deck() {
             for(int i = 0; i < 13; i++) {
@@ -51,12 +50,28 @@ public class BlackJack {
     public class Player {
         int chips, bet;
         String name;
+        ArrayList<Card> hand;
+        boolean busted;
         
        public Player(String n) {
            chips = 500;
            name = n;
            bet = 0;
+           busted = false;
+           hand = new ArrayList<>();
        } 
+       
+       public void hit(Card c){
+           hand.add(c);
+       }
+       public void fold(){
+           hand.clear();
+           bet = 0;
+           busted = true;
+       }
+       public void placeBet(int b){
+           bet = b;
+       }
     }
 
  public static void main(String[] args) {
@@ -79,26 +94,42 @@ public class BlackJack {
         }
         catch (java.util.InputMismatchException e) {
             System.err.println("Wrong input! Enter an integer!");
+            scn.nextLine();
             continue;
         }
         catch (Exception e){
             System.err.println(e);
+            scn.nextLine();
             continue;
         }
-         System.out.println("Yoo");
-        break;
-     }
-     
-     while(mainloop){
-         
-         break;
+        if(0 < player_num && player_num < 5){
+            break;
+        }
+        else {
+            System.err.println("Wrong range! Input an integer in range from 1 to 4");
+            scn.nextLine();
+        }
      }
      
      
     BlackJack bj = new BlackJack();
     BlackJack.Deck deck = bj.new Deck();
-    Card myCard = deck.cards.remove(0);
-    System.out.println(myCard);
+    for(int i = 0; i < player_num; i++){
+        System.out.println("Enter the name of player");
+        players.add(bj.new Player(scn.nextLine()));
+    }
+    BlackJack.Player p1 = bj.new Player("Martin");
+    
+    while(mainloop){
+        for(int i = 0; i < player_num; i++){
+            
+        }
+
+    break;
+    }
+    
+    p1.hit(deck.cards.remove(0));
+    System.out.println(p1.hand);
     }
     
 }
