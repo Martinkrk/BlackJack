@@ -80,9 +80,10 @@ public class BlackJack {
      ArrayList<Player> players = new ArrayList<>();
      Scanner scn = new Scanner(System.in);
      
-     int player_num, blind_size;
-     int[] blinds = new int[2];
+     int player_num;
      int offset = 0;
+     String playerInput = "";
+     Player playerNow;
      
      //START
      System.out.println("Welcome to BlackJack, made by Martin");
@@ -114,41 +115,7 @@ public class BlackJack {
             System.err.println("Wrong range! Input an integer in range from 1 to 4");
         }
      }
-     
-     //Blinds size 
-     while(true) {
-        System.out.printf("Enter the big blind: ");
-
-        try{
-            blind_size = scn.nextInt();
-        }
-        catch (java.util.InputMismatchException e) {
-            System.err.println("Wrong input! Enter an integer!");
-            scn.nextLine();
-            continue;
-        }
-        catch (Exception e){
-            System.err.println(e);
-            scn.nextLine();
-            continue;
-        }
-        finally {
-            scn.nextLine();
-        }
-        if(blind_size > 500){
-            System.out.println("Not enough chips to play with those blinds!");
-            continue;
-        }
-        else if(blind_size < 1){
-            System.out.println("Try positive numbers");
-            continue;
-        }
-        
-        blinds[0] = blind_size / 2;
-        blinds[1] = blind_size;
-        break;
-     }
-     
+         
     BlackJack bj = new BlackJack();
     BlackJack.Deck deck = bj.new Deck();
     for(int i = 0; i < player_num; i++){
@@ -157,20 +124,18 @@ public class BlackJack {
     }
     
     while(mainloop){
-        //Blinds phase
-        for(int i = 0; i < player_num; i++){
-            players.get(i + offset).bet = blinds[0];
-            players.get((i + 1 + offset) % player_num).bet = blinds[1];
-        }
-            if(offset+1 == player_num){
-                offset = 0;
-            }
-        
+              
         //Betting phase
         for(int i = 0; i < player_num; i++){
-            System.out.printf("%s, place a bet%n", players.get(i).name);
+            playerNow = players.get(((i+1+offset) % (player_num+1))-1);
+            
+            if(playerNow.chips == 0){
+                continue;
+            }
+            
+            System.out.printf("%s, you've got %d chips%nPlace a bet: ", playerNow.name, playerNow.chips);
             try{
-                players.get(i).bet = scn.nextInt();
+                playerNow.bet = scn.nextInt();
             }
             catch(Exception e){
                 System.out.println(e);
@@ -181,30 +146,44 @@ public class BlackJack {
                 scn.nextLine();
             }
             //Too much?
-            if(players.get(i).bet > players.get(i).chips){
+            if(playerNow.bet > playerNow.chips){
                 System.out.println("You have insufficient amount of chips!");
                 i-= 1;
                 continue;
             }
             //Too nothing?
-            else if(players.get(i).bet == 0){
+            else if(playerNow.bet == 0){
                 i-=1;
                 System.out.println("Bet... something?");
                 continue;
             }
             //Too negative?
-            else if(players.get(i).bet < 0){
+            else if(playerNow.bet < 0){
                 i-=1;
                 System.out.println("Try using positive numbers");
                 continue;
             }
-            else{
-                System.out.println("Betting unexpected case");
+            
+            //Deal hands
+            for(i = 0; i < player_num; i++){
+                players.get(i).hit(deck.cards.remove(0));
+                players.get(i).hit(deck.cards.remove(0));
             }
             
-            //
+            //Play phase
+            for(i = 0; i < player_num; i++){
+            playerNow = players.get(((i+1+offset) % (player_num+1))-1);
+            
+                System.out.printf("%s, (H)it or (S)tand?%n");
+                playerInput = scn.nextLine();
+                if(playerInput.contains("H") || playerInput.contains("Hit") || playerInput.contains("hit")){
+                    
+                }
+                else if(playerInput.contains("S") || playerInput.contains("Stand") || playerInput.contains("stand")){
+                    
+                }
+            }
         }
-
     break;
     }
     }
